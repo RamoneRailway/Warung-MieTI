@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/gambar/logo-mi.jpeg" type="image/x-icon">
+    <title>Kasir Warung Mienformatika</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <h1 style="display: flex; align-items: center; justify-content: center;">
+        Program Kasir Warung mieTI
+        <span class="material-icons" style="font-size: 50px;">food_bank</span>
+    </h1>
+    <h2 style="display: flex; align-items: center; justify-content: center;">
+        Menu Makanan 
+        <span class="material-icons" style="font-size: 30px;">ramen_dining</span>
+    </h2>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in makanan %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.nama }}</td>
+                <td>Rp{{ item.harga }}</td>
+                <td><a href="{{ url_for('tambah_ke_keranjang', nomor_item=loop.index) }}">Tambah</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2 style="display: flex; align-items: center; justify-content: center;">
+        Menu Minuman 
+        <span class="material-icons" style="font-size: 30px;">local_cafe</span>
+    </h2>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in minuman %}
+            <tr>
+                <td>{{ loop.index + makanan|length }}</td>
+                <td>{{ item.nama }}</td>
+                <td>Rp{{ item.harga }}</td>
+                <td><a href="{{ url_for('tambah_ke_keranjang', nomor_item=loop.index + makanan|length) }}">Tambah</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2 style="display: flex; align-items: center; justify-content: center;">
+        Keranjang
+        <span class="material-icons" style="font-size: 30px;">shopping_cart</span>
+    </h2>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if keranjang %}
+            {% for item in keranjang %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.nama }}</td>
+                <td>Rp{{ item.harga }}</td>
+                <td><a href="{{ url_for('hapus_dari_keranjang', nomor_item=loop.index) }}">Hapus</a></td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Keranjang kosong</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <h2>Total: Rp{{ keranjang|sum(attribute='harga') }}</h2>
+    {% if keranjang|length == 0 %}
+        <p style="color: rgb(255, 255, 255); text-align: center; display: flex; justify-content: center; align-items: center; height: 5vh;">
+            Keranjang tidak boleh kosong. Silakan pilih item untuk melanjutkan.
+        </p>
+    {% endif %}
+    <form action="{{ url_for('bayar') }}" method="POST">
+        <input type="number" name="jumlah" placeholder="Masukkan jumlah bayar" {% if keranjang|length == 0 %}disabled{% endif %}>
+        <button type="submit" {% if keranjang|length == 0 %}disabled{% endif %}>Bayar</button>
+    </form>
+    <br></br>
+</body>
+</html>

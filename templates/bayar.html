@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/gambar/logo-mi.jpeg" type="image/x-icon">
+    <title>Pembayaran Kasir Warung Mienformatika</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bayar.css') }}">
+</head>
+<body>
+    <h1 style="display: flex; align-items: center; justify-content: center;">
+        Program Kasir Warung mieTI
+        <span class="material-icons" style="font-size: 50px;">food_bank</span>
+    </h1>
+    <div class="payment-container">
+        <h2 style="display: flex; align-items: center; justify-content: center;">
+            Total Pembayaran 
+            <span class="material-icons" style="font-size: 35px;"> payments</span>
+        </h2>
+        <p class="total-amount">Rp{{ total }}</p>
+        {% if sukses %}
+        <div class="payment-result">
+            <p class="success">Uang Pembayaran: Rp{{ jumlah }}</p>
+        </div>
+        <div class="payment-result">
+            <p class="success">Pembayaran Berhasil! Kembalian: Rp{{ kembalian }}</p>
+            <a href="{{ url_for('home') }}">Kembali ke Menu</a>
+        </div>
+        {% else %}
+        <div class="payment-result">
+            <p class="error">Uang Pembayaran: Rp{{ jumlah }}</p>
+        </div>
+        <div class="payment-result">
+            <p class="error">Pembayaran Kurang!!. Silakan bayar Rp{{ kekurangan }} lagi.</p>
+            <a href="{{ url_for('home') }}">Kembali ke Menu</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

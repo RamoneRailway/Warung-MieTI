@@ -1,0 +1,12 @@
+# Lingkungan virtual
+venv/
+
+# File sementara
+*.pyc
+__pycache__/
+
+# File konfiguratif sensitif
+*.env
+
+# File log
+*.log
